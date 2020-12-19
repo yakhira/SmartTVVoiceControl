@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  SmartTVVoiceControl:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: SmartTVVoiceControl
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+      CodeUri: source
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Statement:
+          - Sid: SQSGetQueueUrlPolicy
+            Effect: Allow
+            Action: sqs:GetQueueUrl
+            Resource: !GetAtt Queue.Arn
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt Queue.QueueName
+      Queue:
+        Type: AWS::SQS::Queue
+        Properties:
+          ContentBasedDeduplication: True
+          FifoQueue: True
+          KmsMasterKeyId: alias/aws/sqs
+          VisibilityTimeout: 900
+      Environment:
+        Variables:
+          SQS_QUEUE: !GetAtt Queue.QueueName
