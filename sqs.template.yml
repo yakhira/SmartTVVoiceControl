@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  AlexaSQSQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId: alias/aws/sqs
+      VisibilityTimeout: 900
+Outputs:
+  AlexaSQSQueueARN:
+    Value: !GetAtt AlexaSQSQueue.Arn
+    Export:
+      Name: !Sub AlexaSQSQueueARN

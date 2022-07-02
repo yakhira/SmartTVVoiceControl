@@ -1,7 +1,6 @@
 import os
 
-SQS_QUEUE = os.getenv('SQS_QUEUE', '')
-SQS_REGION = os.getenv('SQS_REGION', 'us-west-2')
+SQS_QUEUE_ARN = os.getenv('SQS_QUEUE_ARN', 'us-west-2')
 SKILL_NAME = 'Smart TV'
 SKILL_DESCRIPTION = 'Smart TV TV Voice Controll Skill'
 SKILL_ENDPOINT = 'smart-tv-01'

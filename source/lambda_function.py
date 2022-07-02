@@ -11,13 +11,12 @@ from smarttv.smarttv import SmartTV
 def lambda_handler(request, context):
     response = {}
 
-    smarttv = SmartTV(config.SQS_QUEUE, config.SQS_REGION)
+    smarttv = SmartTV(config.SQS_QUEUE_ARN)
 
     directive = request.get('directive', {})
     request = request.get('request', {})
 
     if request.get('type') == 'IntentRequest':
-        print(json.dumps(request['intent']))
         alexa_response = SmartSKillsResponse(text='Sorry, i don`t know that command')
 
         if request['intent']['name'] == 'SmartTVApp':
@@ -189,5 +188,4 @@ def lambda_handler(request, context):
                 message=f'Command not supported by SmartTV.'
             )
 
-    print(json.dumps(response))
     return response

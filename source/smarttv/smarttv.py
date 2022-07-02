@@ -5,13 +5,17 @@ import json
 from base64 import b64encode
 
 class SmartTV(object):
-    def __init__(self, queue, sqs_region):
+    def __init__(self, queue_arn):
+        region_name = queue_arn.split(":")[3]
+        queue_name = queue_arn.split(":")[5]
+
         sqs = boto3.client(
             service_name='sqs',
-            endpoint_url=f'https://sqs.{sqs_region}.amazonaws.com'
+            endpoint_url=f'https://sqs.{region_name}.amazonaws.com',
+            region_name=region_name
         )
-        self.__queue = boto3.resource('sqs').Queue(
-            sqs.get_queue_url(QueueName=queue).get('QueueUrl')
+        self.__queue = boto3.resource('sqs', region_name=region_name).Queue(
+            sqs.get_queue_url(QueueName=queue_name).get('QueueUrl')
         )
 
     def __getattr__(self, name):
